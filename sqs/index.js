@@ -43,7 +43,20 @@ function send(body) {
   } ); 
 }
 
-function get() {
+var params2 = {
+  AttributeNames: [
+     "SentTimestamp"
+  ],
+  MaxNumberOfMessages: 10,
+  MessageAttributeNames: [
+     "All"
+  ],
+  QueueUrl,
+  VisibilityTimeout: 20,
+  WaitTimeSeconds: 0
+ };
+
+function get2() {
   const app = Consumer.create({
     queueUrl: QueueUrl,
     waitTimeSeconds: 0,
@@ -69,6 +82,37 @@ function get() {
   app.start();
 
   return Promise.resolve(true);
+}
+
+async function get() {
+  while(true) {
+    await get3();
+  }
+}
+
+function get3() {
+  return new Promise( (resolve, reject) => {
+    sqs.receiveMessage(params2, function(err, data) {
+      if (err) {
+        console.log("Receive Error", err);
+        return reject(false);
+      } else if (data.Messages) {
+        var deleteParams = {
+          QueueUrl,
+          ReceiptHandle: data.Messages[0].ReceiptHandle
+        };
+        console.log(data.Messages[0].Body);
+        sqs.deleteMessage(deleteParams, function(err, data) {
+          if (err) {
+            console.log("Delete Error", err);
+          } else {
+            console.log("Message Deleted", data);
+          }
+        });
+        resolve(true);
+      }
+    });
+  });
 }
 
 

@@ -46,8 +46,10 @@ function send(body) {
 function get() {
   const app = Consumer.create({
     queueUrl: QueueUrl,
-    handleMessage: async (message) => {
-      console.log(message.Body)
+    waitTimeSeconds: 0,
+    batchSize: 10,
+    handleMessageBatch: async (message) => {
+      console.log(message)
     },
     sqs: new AWS.SQS()
   });

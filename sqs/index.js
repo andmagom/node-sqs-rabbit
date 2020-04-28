@@ -85,7 +85,7 @@ function get2() {
 }
 
 async function get() {
-  setInterval( () => get3(), 80 ) ;
+  setInterval( () => get3(), 50 ) ;
 }
 
 function get3() {

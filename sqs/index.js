@@ -97,12 +97,21 @@ function get3() {
         console.log("Receive Error", err);
         return reject(false);
       } else if (data.Messages) {
+        const arrayEntries = [];
+        data.Messages.forEach(data => {
+          //console.log("dataaa "+ JSON.stringify(data));
+          const obj = {
+              Id: data.MessageId,
+              ReceiptHandle: data.ReceiptHandle /* required */
+          };
+          arrayEntries.push(obj);
+        });
         var deleteParams = {
           QueueUrl,
-          ReceiptHandle: data.Messages[0].ReceiptHandle
+          Entries: arrayEntries
         };
-        console.log(data.Messages[0].Body);
-        sqs.deleteMessage(deleteParams, function(err, data) {
+        console.log(data.Messages.length);
+        sqs.deleteMessageBatch(deleteParams, function(err, data) {
           if (err) {
             console.log("Delete Error", err);
           } else {

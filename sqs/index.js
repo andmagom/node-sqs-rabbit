@@ -84,8 +84,9 @@ function get2() {
   return Promise.resolve(true);
 }
 
-async function get() {
-  setInterval( () => get3(), 50 ) ;
+function get() {
+  setInterval( () => get3(), 40 ) ;
+  return Promise.resolve(true);
 }
 
 function get3() {
@@ -113,7 +114,7 @@ function get3() {
           if (err) {
             console.log("Delete Error", err);
           } else {
-            console.log("Message Deleted", data);
+            //console.log("Message Deleted", data);
           }
         });
         resolve(true);
